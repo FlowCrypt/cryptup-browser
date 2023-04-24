@@ -1972,7 +1972,45 @@ jA==
       expect(result.get('internal usableForSigningButExpired')).to.equal('[-] false');
       t.pass();
     });
-
+    test('[KeyUtil.diagnose] decrypts and tests RSA1024 PK and RSA1024 SK', async t => {
+      const result = await KeyUtil.diagnose(await KeyUtil.parse(testConstants.rsa1024secret), '');
+      expect(result.get('Is Private?')).to.equal('[-] true');
+      expect(result.get('User id 0')).to.equal('rsa1024@test');
+      expect(result.get('Primary User')).to.equal('rsa1024@test');
+      expect(result.get('Fingerprint')).to.equal('E9A0 AD72 11FE 7E37 2DCE 62AC 672C 24E1 38A0 37F4');
+      expect(result.get('Subkeys')).to.equal('[-] 1');
+      expect(result.get('Primary key algo')).to.equal('[-] rsaEncryptSign');
+      expect(result.get('Primary key verify')).to.equal('[-] valid');
+      expect(result.get('Primary key creation?')).to.equal('[-] 1611140945 or 2021-01-20T11:09:05.000Z');
+      expect(result.get('Primary key expiration?')).to.equal('[-] -');
+      expect(
+        result.has(
+          'Encrypt/Decrypt test: Got error performing encryption/decryption test: Error: Error encrypting message: Could not find valid encryption key packet in key 672c24e138a037f4: RSA keys shorter than 2047 bits are considered too weak.'
+        )
+      ).to.be.true;
+      expect(result.get('Sign/Verify test')).to.equal(
+        '[-] Exception: Error: Could not find valid signing key packet in key 672c24e138a037f4: RSA keys shorter than 2047 bits are considered too weak.'
+      );
+      expect(result.get('SK 0 > LongId')).to.equal('[-] 2C322F7709C13B10');
+      expect(result.get('SK 0 > Created')).to.equal('[-] 1611140946 or 2021-01-20T11:09:06.000Z');
+      expect(result.get('SK 0 > Algo')).to.equal('[-] rsaEncryptSign');
+      expect(result.get('SK 0 > Verify')).to.equal('[-] OK');
+      expect(result.get('SK 0 > Subkey object type')).to.equal('[-] SecretSubkeyPacket');
+      expect(result.get('SK 0 > Subkey getBitSize')).to.equal('[-] 1024');
+      expect(result.get('SK 0 > Subkey decrypted')).to.equal('[-] true');
+      expect(result.get('SK 0 > Binding signature length')).to.equal('[-] 1');
+      expect(result.get('SK 0 > SIG 0 > Key flags')).to.equal('[-] 12');
+      expect(result.get('SK 0 > SIG 0 > Version')).to.equal('[-] 4');
+      expect(result.get('SK 0 > SIG 0 > Public key algorithm')).to.equal('[-] 1');
+      expect(result.get('SK 0 > SIG 0 > Sig creation time')).to.equal('[-] 1611140947 or 2021-01-20T11:09:07.000Z');
+      expect(result.get('SK 0 > SIG 0 > Sig expiration time')).to.equal('[-] -');
+      expect(result.get('SK 0 > SIG 0 > Verify')).to.equal('[-] valid');
+      expect(result.get('expiration')).to.equal('[-] undefined');
+      expect(result.get('internal dateBeforeExpiration')).to.equal('[-] undefined');
+      expect(result.get('internal usableForEncryptionButExpired')).to.equal('[-] false');
+      expect(result.get('internal usableForSigningButExpired')).to.equal('[-] false');
+      t.pass();
+    });
     test('[KeyUtil.diagnose] decrypts and tests secure PK and insecure SK', async t => {
       const result = await KeyUtil.diagnose(await KeyUtil.parse(testConstants.rsa1024subkeyOnly), '');
       expect(result.get('Is Private?')).to.equal('[-] true');
@@ -1986,7 +2024,7 @@ jA==
       expect(result.get('Primary key expiration?')).to.equal('[-] -');
       expect(
         result.has(
-          'Encrypt/Decrypt test: Got error performing encryption/decryption test: Error: Error encrypting message: Could not find valid encryption key packet in key b65550f577cf5cc5'
+          'Encrypt/Decrypt test: Got error performing encryption/decryption test: Error: Error encrypting message: Could not find valid encryption key packet in key b65550f577cf5cc5: RSA keys shorter than 2047 bits are considered too weak.'
         )
       ).to.be.true;
       expect(result.get('Sign/Verify test')).to.equal('[-] sign msg ok|verify ok');
@@ -2617,59 +2655,32 @@ oYO0H2wzxUfJQIcXL8HfNs70eXJwD7U9F6gnIeUKA8+1NsQMgQE=
     });
 
     test(`[unit][OpenPGPKey.parse] sets usableForEncryption and usableForSigning to false for RSA key less than 2048`, async t => {
-      const rsa1024secret = `-----BEGIN PGP PRIVATE KEY BLOCK-----
-
-xcEYBGAID1EBBACypl5K0IoqFjfpSrIhbhT5H5MjQg4MKRlgMfqXjo8pEeB6Yf88wvBni36iRdSn
-ovc7mbuOSPc+Z8ABqGPdW5AWs6K/gchWyIzuDQ32pRfUKc9SAAs0Ddyv/+S4XKUCLdX88yUsjnnK
-8beHnju57bIsiamo19HqsfZKJUQb4ZS33wARAQABAAP+M5ZH/ymV5A5Tadnocy/S/ZcpCVLfNJK/
-oZ/9ATuoyk6/uAdJSVXvTq8gy6IHhLrR0pOTbcRTJOGXt8LUx4xToEcHw1uTIVmtw7EtDQdMPyKC
-HjFbIAhWGXbefQItohKBEDfucXgwI0YpNdIjk6mFc0IO6/XUIQg1bMg/UK0HA80CANEI9OQDNgAR
-caikGHAl672KWBwTBM8XgytF7D+Bzt41eElKswMFYyMlRzZlSmkx3sJ+XdCHuC0skQIluV181EsC
-ANrJwSfyOsPhqQ+GjNdg8uPEdLvIK6CLdMwEelvGPkXuyq58ACCgiFKlir2taNqfQfD+V1XGWqLy
-rzSplwgZJj0B/3EIZSiM8oC9eBsq9Eo29d/wEkspz14qsQsvl6IEAQzk6utsmWRViLrkijVPOTgb
-ZbQm646+Japkh+lC1uz4F7WXK80McnNhMTAyNEB0ZXN0wsAIBBMBCAAzFiEE6aCtchH+fjctzmKs
-Zywk4TigN/QFAmAID1ICGwMFCwkIBwIGFQgJCgsCBRYCAwEAAAoJEGcsJOE4oDf0LCwD+My9gLrB
-B3bjq694Yx5H6aLayc79fm6aL3bEBJGD6EQMqGTbN+Gfz6JcpCzOBW7Jn9Jc5PC+4d0JxK7TzBXE
-SxM2ViraS5ScW3GuqVoAw00/0NRYrXr7iTkzT8gAdEBNXdn/ozlCrNkR8JxOmcyqJtTwPkzMRy9D
-MtbTz6xoGaPHwRgEYAgPUgEEAN5qHMlEB1uwxr/bEL4ZWcSvEFRP7hSC2isB9JlomACDPHRQAi5q
-dOXaP3BD81mVm3FRKtc6UuLao641+RNmiTrDSKpmB7MIPRS4tO4DIBDj4g7xz0AXHs+OYqBi2+iU
-Hy0dclP6TP2dWE1fT7bgfD3GaaKri6Zgfb5ZLQ+bGL03ABEBAAEAA/9uU5q1563yuKzOLJ+QfMi/
-vMtP11pVCFeqb8zicDS+RFsvoySB28Li5bEEQmCrNoAl5MpoewD0kNoSp6lHC1zUQQymouefK/W3
-pD8bNcFRzpQ1m4iVkEG1o6Joq1wxQe+OHbxDxil8VluAGMWdXSzPUFH/JYu7z819E8C3NO0ZcQIA
-3nnloE/O6k382CLYEkEu2aXownXlhtuCNslif4vUMRePZvPTD93lUHnFZ0ZZcJTMq4YdFcuXlyZI
-2XlnHfe3nwIA/+3WRADntAcFFp/3HMSl1Jua9ic89rABgXXZqvxhy2cu+9wZR+GpHjZy9Pm/kOHS
-wjl+nI4Q6pQcdxCYn75zaQIAi8KOAoDDeNC8wjUS2FN84/2Asc78D0MQc442CqCQ70It8csDTanH
-xamPFeub/1JW7H0hkma1C5CEi2coHjeAbambwrYEGAEIACAWIQTpoK1yEf5+Ny3OYqxnLCThOKA3
-9AUCYAgPUwIbDAAKCRBnLCThOKA39O3dA/0RALQ6Sp35YWvHN4iYvInO9DZIEvaSBjpzNNDThRvp
-XfiBZBgRV34sZ8IjBXWnHmnJOioXG0LnZ7V37Zpa1PnPcqKd5kXg649NS+jXqyd7yjgIhyhB54VC
-r7V4UalYBHeiwKQhzrU8KfaVfVaYu7ctfitV5Ba/8SqxrblMAZAV6A==
-=pcI4
------END PGP PRIVATE KEY BLOCK-----`;
-      const key1 = await KeyUtil.parse(rsa1024secret);
+      const key1 = await KeyUtil.parse(testConstants.rsa1024secret);
       expect(key1.usableForEncryption).to.equal(false);
       expect(key1.usableForSigning).to.equal(false);
       expect(key1.usableForEncryptionButExpired).to.equal(false);
       expect(key1.usableForSigningButExpired).to.equal(false);
       expect(key1.missingPrivateKeyForDecryption).to.equal(false);
       expect(key1.missingPrivateKeyForSigning).to.equal(false);
-      const rsa1024public = `-----BEGIN PGP PUBLIC KEY BLOCK-----
+      const key2 = await KeyUtil.parse(testConstants.rsa1024public);
+      expect(key2.usableForEncryption).to.equal(false);
+      expect(key2.usableForSigning).to.equal(false);
+      expect(key2.usableForEncryptionButExpired).to.equal(false);
+      expect(key2.usableForSigningButExpired).to.equal(false);
+      expect(key2.missingPrivateKeyForDecryption).to.equal(false);
+      expect(key2.missingPrivateKeyForSigning).to.equal(false);
+      t.pass();
+    });
 
-xo0EYAgPUQEEALKmXkrQiioWN+lKsiFuFPkfkyNCDgwpGWAx+peOjykR4Hph/zzC8GeLfqJF1Kei
-9zuZu45I9z5nwAGoY91bkBazor+ByFbIjO4NDfalF9Qpz1IACzQN3K//5LhcpQIt1fzzJSyOecrx
-t4eeO7ntsiyJqajX0eqx9kolRBvhlLffABEBAAHNDHJzYTEwMjRAdGVzdMLACAQTAQgAMxYhBOmg
-rXIR/n43Lc5irGcsJOE4oDf0BQJgCA9SAhsDBQsJCAcCBhUICQoLAgUWAgMBAAAKCRBnLCThOKA3
-9CwsA/jMvYC6wQd246uveGMeR+mi2snO/X5umi92xASRg+hEDKhk2zfhn8+iXKQszgVuyZ/SXOTw
-vuHdCcSu08wVxEsTNlYq2kuUnFtxrqlaAMNNP9DUWK16+4k5M0/IAHRATV3Z/6M5QqzZEfCcTpnM
-qibU8D5MzEcvQzLW08+saBmjzo0EYAgPUgEEAN5qHMlEB1uwxr/bEL4ZWcSvEFRP7hSC2isB9Jlo
-mACDPHRQAi5qdOXaP3BD81mVm3FRKtc6UuLao641+RNmiTrDSKpmB7MIPRS4tO4DIBDj4g7xz0AX
-Hs+OYqBi2+iUHy0dclP6TP2dWE1fT7bgfD3GaaKri6Zgfb5ZLQ+bGL03ABEBAAHCtgQYAQgAIBYh
-BOmgrXIR/n43Lc5irGcsJOE4oDf0BQJgCA9TAhsMAAoJEGcsJOE4oDf07d0D/REAtDpKnflha8c3
-iJi8ic70NkgS9pIGOnM00NOFG+ld+IFkGBFXfixnwiMFdaceack6KhcbQudntXftmlrU+c9yop3m
-ReDrj01L6NerJ3vKOAiHKEHnhUKvtXhRqVgEd6LApCHOtTwp9pV9Vpi7ty1+K1XkFr/xKrGtuUwB
-kBXo
-=PeOs
------END PGP PUBLIC KEY BLOCK-----`;
-      const key2 = await KeyUtil.parse(rsa1024public);
+    test(`[unit][OpenPGPKey.parse] sets usableForEncryption and usableForSigning to false for primary RSA1024 key and RSA4096 subkey`, async t => {
+      const key1 = await KeyUtil.parse(testConstants.rsa1024primary4096subkeySecret);
+      expect(key1.usableForEncryption).to.equal(false);
+      expect(key1.usableForSigning).to.equal(false);
+      expect(key1.usableForEncryptionButExpired).to.equal(false);
+      expect(key1.usableForSigningButExpired).to.equal(false);
+      expect(key1.missingPrivateKeyForDecryption).to.equal(false);
+      expect(key1.missingPrivateKeyForSigning).to.equal(false);
+      const key2 = await KeyUtil.parse(testConstants.rsa1024primary4096subkeyPublic);
       expect(key2.usableForEncryption).to.equal(false);
       expect(key2.usableForSigning).to.equal(false);
       expect(key2.usableForEncryptionButExpired).to.equal(false);
