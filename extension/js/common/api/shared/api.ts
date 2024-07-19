@@ -110,13 +110,6 @@ export class Api {
     Api.throwIfApiPathTraversalAttempted(req.url);
     const headersInit: [string, string][] = req.headers ? Object.entries(req.headers) : [];
     // capitalize? .map(([key, value]) => { return [Str.capitalize(key), value]; })
-    const newTimeoutPromise = (): Promise<never> => {
-      return new Promise((_resolve, reject) => {
-        /* error-handled */ setTimeout(() => {
-          reject(AjaxErr.fromXhr({ readyState, status: -1, statusText: 'timeout' }, reqContext)); // Reject the promise with a timeout error
-        }, req.timeout ?? 20000);
-      });
-    };
     let body: BodyInit | undefined;
     let duplex: 'half' | undefined;
     let uploadPromise: () => void | Promise<void> = Value.noop;
@@ -173,10 +166,18 @@ export class Api {
     };
     let readyState = 1; // OPENED
     const reqContext = { url: req.url, method: req.method, data: body, stack: req.stack };
+    const newTimeoutPromise = (): Promise<never> => {
+      return new Promise((_resolve, reject) => {
+        /* error-handled */ setTimeout(() => {
+          reject(AjaxErr.fromXhr({ readyState, status: -1, statusText: 'timeout' }, reqContext)); // Reject the promise with a timeout error
+        }, req.timeout ?? 20000);
+      });
+    };
     try {
       const fetchPromise = fetch(url, requestInit);
       await uploadPromise();
       const response = await Promise.race([fetchPromise, newTimeoutPromise()]);
+
       if (!response.ok) {
         let responseText: string | undefined;
         readyState = 2; // HEADERS_RECEIVED

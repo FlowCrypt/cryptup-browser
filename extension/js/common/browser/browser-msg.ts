@@ -5,7 +5,7 @@
 import { AuthRes } from '../api/authentication/google/google-oauth.js';
 import { AjaxErr } from '../api/shared/api-error.js';
 import { Buf } from '../core/buf.js';
-import { Dict, Str, UrlParams } from '../core/common.js';
+import { Dict, Str, UrlParams, Value } from '../core/common.js';
 import { NotificationGroupType } from '../notifications.js';
 import { Catch } from '../platform/catch.js';
 import { PassphraseDialogType } from '../xss-safe-factory.js';
@@ -224,110 +224,43 @@ export class BrowserMsg {
           BrowserMsg.sendAwait(undefined, 'expirationCacheDeleteExpired', bm, true) as Promise<Bm.Res.ExpirationCacheDeleteExpired>,
       },
     },
-    passphraseEntry: (bm: Bm.PassphraseEntry) => {
-      BrowserMsg.sendCatch('broadcast', 'passphrase_entry', bm);
-    },
-    addEndSessionBtn: (dest: Bm.Dest) => {
-      BrowserMsg.sendCatch(dest, 'add_end_session_btn', {});
-    },
-    openPage: (dest: Bm.Dest, bm: Bm.OpenPage) => {
-      BrowserMsg.sendCatch(dest, 'open_page', bm);
-    },
-    setCss: (dest: Bm.Dest, bm: Bm.SetCss) => {
-      BrowserMsg.sendCatch(dest, 'set_css', bm);
-    },
-    addClass: (dest: Bm.Dest, bm: Bm.AddOrRemoveClass) => {
-      BrowserMsg.sendCatch(dest, 'add_class', bm);
-    },
-    removeClass: (dest: Bm.Dest, bm: Bm.AddOrRemoveClass) => {
-      BrowserMsg.sendCatch(dest, 'remove_class', bm);
-    },
-    closeDialog: (frame: ChildFrame) => {
-      BrowserMsg.sendToParentWindow(frame, 'close_dialog', {});
-    },
-    authWindowResult: (dest: Bm.Dest, bm: Bm.AuthWindowResult) => {
-      BrowserMsg.sendCatch(dest, 'auth_window_result', bm);
-    },
-    closePage: (dest: Bm.Dest) => {
-      BrowserMsg.sendCatch(dest, 'close_page', {});
-    },
-    setActiveWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => {
-      BrowserMsg.sendCatch(dest, 'set_active_window', bm);
-    },
-    focusPreviousActiveWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => {
-      BrowserMsg.sendCatch(dest, 'focus_previous_active_window', bm);
-    },
-    closeComposeWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => {
-      BrowserMsg.sendCatch(dest, 'close_compose_window', bm);
-    },
-    focusBody: (dest: Bm.Dest) => {
-      BrowserMsg.sendCatch(dest, 'focus_body', {});
-    },
-    focusFrame: (dest: Bm.Dest, bm: Bm.ComposeWindow) => {
-      BrowserMsg.sendCatch(dest, 'focus_frame', bm);
-    },
-    closeReplyMessage: (dest: Bm.Dest, bm: Bm.ComposeWindow) => {
-      BrowserMsg.sendCatch(dest, 'close_reply_message', bm);
-    },
-    scrollToReplyBox: (dest: Bm.Dest, bm: Bm.ScrollToReplyBox) => {
-      BrowserMsg.sendCatch(dest, 'scroll_to_reply_box', bm);
-    },
-    scrollToCursorInReplyBox: (dest: Bm.Dest, bm: Bm.ScrollToCursorInReplyBox) => {
-      BrowserMsg.sendCatch(dest, 'scroll_to_cursor_in_reply_box', bm);
-    },
-    reinsertReplyBox: (dest: Bm.Dest, bm: Bm.ReinsertReplyBox) => {
-      BrowserMsg.sendCatch(dest, 'reinsert_reply_box', bm);
-    },
-    passphraseDialog: (dest: Bm.Dest, bm: Bm.PassphraseDialog) => {
-      BrowserMsg.sendCatch(dest, 'passphrase_dialog', bm);
-    },
-    notificationShow: (dest: Bm.Dest, bm: Bm.NotificationShow) => {
-      BrowserMsg.sendCatch(dest, 'notification_show', bm);
-    },
-    notificationShowAuthPopupNeeded: (dest: Bm.Dest, bm: Bm.NotificationShowAuthPopupNeeded) => {
-      BrowserMsg.sendCatch(dest, 'notification_show_auth_popup_needed', bm);
-    },
-    showConfirmation: (frame: ChildFrame, bm: Bm.ShowConfirmation) => {
-      BrowserMsg.sendToParentWindow(frame, 'confirmation_show', bm, 'confirmation_result');
-    },
-    renderPublicKeys: (dest: Bm.Dest, bm: Bm.RenderPublicKeys) => {
-      BrowserMsg.sendCatch(dest, 'render_public_keys', bm);
-    },
-    replyPubkeyMismatch: (dest: Bm.Dest) => {
-      BrowserMsg.sendCatch(dest, 'reply_pubkey_mismatch', {});
-    },
-    addPubkeyDialog: (dest: Bm.Dest, bm: Bm.AddPubkeyDialog) => {
-      BrowserMsg.sendCatch(dest, 'add_pubkey_dialog', bm);
-    },
-    reload: (dest: Bm.Dest, bm: Bm.Reload) => {
-      BrowserMsg.sendCatch(dest, 'reload', bm);
-    },
-    redirect: (dest: Bm.Dest, bm: Bm.Redirect) => {
-      BrowserMsg.sendCatch(dest, 'redirect', bm);
-    },
-    addToContacts: (dest: Bm.Dest) => {
-      BrowserMsg.sendCatch(dest, 'addToContacts', {});
-    },
-    reRenderRecipient: (dest: Bm.Dest, bm: Bm.ReRenderRecipient) => {
-      BrowserMsg.sendCatch(dest, 'reRenderRecipient', bm);
-    },
-    showAttachmentPreview: (frame: ChildFrame, bm: Bm.ShowAttachmentPreview) => {
-      BrowserMsg.sendToParentWindow(frame, 'show_attachment_preview', bm);
-    },
-    ajaxProgress: (dest: Bm.Dest, bm: Bm.AjaxProgress) => {
-      BrowserMsg.sendCatch(dest, 'ajax_progress', bm);
-    },
-    pgpBlockRender: (dest: Bm.Dest, bm: RenderMessage) => {
-      BrowserMsg.sendCatch(dest, 'pgp_block_render', bm);
-    },
+    passphraseEntry: (bm: Bm.PassphraseEntry, sendCallback = Value.noop) => BrowserMsg.sendCatch('broadcast', 'passphrase_entry', bm, sendCallback, false),
+    addEndSessionBtn: (dest: Bm.Dest) => BrowserMsg.sendCatch(dest, 'add_end_session_btn', {}),
+    openPage: (dest: Bm.Dest, bm: Bm.OpenPage) => BrowserMsg.sendCatch(dest, 'open_page', bm),
+    setCss: (dest: Bm.Dest, bm: Bm.SetCss) => BrowserMsg.sendCatch(dest, 'set_css', bm),
+    addClass: (dest: Bm.Dest, bm: Bm.AddOrRemoveClass) => BrowserMsg.sendCatch(dest, 'add_class', bm),
+    removeClass: (dest: Bm.Dest, bm: Bm.AddOrRemoveClass) => BrowserMsg.sendCatch(dest, 'remove_class', bm),
+    closeDialog: (frame: ChildFrame) => BrowserMsg.sendToParentWindow(frame, 'close_dialog', {}),
+    authWindowResult: (dest: Bm.Dest, bm: Bm.AuthWindowResult) => BrowserMsg.sendCatch(dest, 'auth_window_result', bm),
+    closePage: (dest: Bm.Dest) => BrowserMsg.sendCatch(dest, 'close_page', {}),
+    setActiveWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => BrowserMsg.sendCatch(dest, 'set_active_window', bm),
+    focusPreviousActiveWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => BrowserMsg.sendCatch(dest, 'focus_previous_active_window', bm),
+    closeComposeWindow: (dest: Bm.Dest, bm: Bm.ComposeWindow) => BrowserMsg.sendCatch(dest, 'close_compose_window', bm),
+    focusBody: (dest: Bm.Dest) => BrowserMsg.sendCatch(dest, 'focus_body', {}),
+    focusFrame: (dest: Bm.Dest, bm: Bm.ComposeWindow) => BrowserMsg.sendCatch(dest, 'focus_frame', bm),
+    closeReplyMessage: (dest: Bm.Dest, bm: Bm.ComposeWindow) => BrowserMsg.sendCatch(dest, 'close_reply_message', bm),
+    scrollToReplyBox: (dest: Bm.Dest, bm: Bm.ScrollToReplyBox) => BrowserMsg.sendCatch(dest, 'scroll_to_reply_box', bm),
+    scrollToCursorInReplyBox: (dest: Bm.Dest, bm: Bm.ScrollToCursorInReplyBox) => BrowserMsg.sendCatch(dest, 'scroll_to_cursor_in_reply_box', bm),
+    reinsertReplyBox: (dest: Bm.Dest, bm: Bm.ReinsertReplyBox) => BrowserMsg.sendCatch(dest, 'reinsert_reply_box', bm),
+    passphraseDialog: (dest: Bm.Dest, bm: Bm.PassphraseDialog) => BrowserMsg.sendCatch(dest, 'passphrase_dialog', bm),
+    notificationShow: (dest: Bm.Dest, bm: Bm.NotificationShow) => BrowserMsg.sendCatch(dest, 'notification_show', bm),
+    notificationShowAuthPopupNeeded: (dest: Bm.Dest, bm: Bm.NotificationShowAuthPopupNeeded) =>
+      BrowserMsg.sendCatch(dest, 'notification_show_auth_popup_needed', bm),
+    showConfirmation: (frame: ChildFrame, bm: Bm.ShowConfirmation) => BrowserMsg.sendToParentWindow(frame, 'confirmation_show', bm, 'confirmation_result'),
+    renderPublicKeys: (dest: Bm.Dest, bm: Bm.RenderPublicKeys) => BrowserMsg.sendCatch(dest, 'render_public_keys', bm),
+    replyPubkeyMismatch: (dest: Bm.Dest) => BrowserMsg.sendCatch(dest, 'reply_pubkey_mismatch', {}),
+    addPubkeyDialog: (dest: Bm.Dest, bm: Bm.AddPubkeyDialog) => BrowserMsg.sendCatch(dest, 'add_pubkey_dialog', bm),
+    reload: (dest: Bm.Dest, bm: Bm.Reload) => BrowserMsg.sendCatch(dest, 'reload', bm),
+    redirect: (dest: Bm.Dest, bm: Bm.Redirect) => BrowserMsg.sendCatch(dest, 'redirect', bm),
+    addToContacts: (dest: Bm.Dest) => BrowserMsg.sendCatch(dest, 'addToContacts', {}),
+    reRenderRecipient: (dest: Bm.Dest, bm: Bm.ReRenderRecipient) => BrowserMsg.sendCatch(dest, 'reRenderRecipient', bm),
+    showAttachmentPreview: (frame: ChildFrame, bm: Bm.ShowAttachmentPreview) => BrowserMsg.sendToParentWindow(frame, 'show_attachment_preview', bm),
+    ajaxProgress: (dest: Bm.Dest, bm: Bm.AjaxProgress) => BrowserMsg.sendCatch(dest, 'ajax_progress', bm),
+    pgpBlockRender: (dest: Bm.Dest, bm: RenderMessage) => BrowserMsg.sendCatch(dest, 'pgp_block_render', bm),
+    pgpBlockReady: (frame: ChildFrame, bm: Bm.PgpBlockReady) => BrowserMsg.sendToParentWindow(frame, 'pgp_block_ready', bm),
+    pgpBlockRetry: (frame: ChildFrame, bm: Bm.PgpBlockRetry) => BrowserMsg.sendToParentWindow(frame, 'pgp_block_retry', bm),
     setHandlerReadyForPGPBlock: (dest: Bm.Dest) => {
       BrowserMsg.sendCatch(dest, 'set_handler_ready_for_pgp_block', {});
-    },
-    pgpBlockReady: (frame: ChildFrame, bm: Bm.PgpBlockReady) => {
-      BrowserMsg.sendToParentWindow(frame, 'pgp_block_ready', bm);
-    },
-    pgpBlockRetry: (frame: ChildFrame, bm: Bm.PgpBlockRetry) => {
-      BrowserMsg.sendToParentWindow(frame, 'pgp_block_retry', bm);
     },
   };
   private static readonly processed = new Set<string>(); // or ExpirationCache?
@@ -462,24 +395,27 @@ export class BrowserMsg {
 
   protected static listenForWindowMessages(dest: Bm.Dest) {
     const extensionOrigin = Env.getExtensionOrigin();
-    addEventListener('message', async e => {
+
+    addEventListener('message', e => {
       if (e.origin !== 'https://mail.google.com' && e.origin !== extensionOrigin) return;
       const encryptedMsg = e.data as SymEncryptedMessage;
-      if (BrowserMsg.processed.has(encryptedMsg.uid)) return;
-      let handled = false;
-      if ([dest, 'broadcast'].includes(encryptedMsg.to)) {
-        const msg = await SymmetricMessageEncryption.decrypt(encryptedMsg);
-        handled = BrowserMsg.handleMsg(msg, (rawResponse: Bm.RawResponse) => {
-          if (msg.responseName && typeof msg.data.bm.messageSender !== 'undefined') {
-            // send response as a new request
-            BrowserMsg.sendRaw(msg.data.bm.messageSender, msg.responseName, rawResponse.result as Dict<unknown>).catch(Catch.reportErr);
-          }
-        });
-      }
-      if (!handled && encryptedMsg.propagateToParent) {
-        BrowserMsg.processed.add(encryptedMsg.uid);
-        BrowserMsg.sendUpParentLine(encryptedMsg);
-      }
+      if (!encryptedMsg || typeof encryptedMsg.uid !== 'string' || BrowserMsg.processed.has(encryptedMsg.uid)) return;
+      Catch.try(async () => {
+        let handled = false;
+        if ([dest, 'broadcast'].includes(encryptedMsg.to)) {
+          const msg = await SymmetricMessageEncryption.decrypt(encryptedMsg);
+          handled = BrowserMsg.handleMsg(msg, (rawResponse: Bm.RawResponse) => {
+            if (msg.responseName && typeof msg.data.bm.messageSender !== 'undefined') {
+              // send response as a new request
+              BrowserMsg.sendRaw(msg.data.bm.messageSender, msg.responseName, rawResponse.result as Dict<unknown>).catch(Catch.reportErr);
+            }
+          });
+        }
+        if (!handled && encryptedMsg.propagateToParent) {
+          BrowserMsg.processed.add(encryptedMsg.uid);
+          BrowserMsg.sendUpParentLine(encryptedMsg);
+        }
+      })();
     });
   }
 
@@ -539,11 +475,18 @@ export class BrowserMsg {
     return false;
   }
 
-  private static sendCatch(dest: Bm.Dest | undefined, name: string, bm: Dict<unknown>) {
-    BrowserMsg.sendAwait(dest, name, bm).catch(Catch.reportErr);
-  }
+  private static sendCatch = (dest: Bm.Dest | undefined, name: string, bm: Dict<unknown>, sendCallback = Value.noop, postToSelf = true) => {
+    BrowserMsg.sendAwait(dest, name, bm, false, sendCallback, postToSelf).catch(Catch.reportErr);
+  };
 
-  private static async sendAwait(destString: string | undefined, name: string, bm?: Dict<unknown>, awaitRes = false): Promise<Bm.Response> {
+  private static sendAwait = async (
+    destString: string | undefined,
+    name: string,
+    bm?: Dict<unknown>,
+    awaitRes = false,
+    sendCallback = Value.noop,
+    postToSelf = true
+  ): Promise<Bm.Response> => {
     bm = bm || {};
     // console.debug(`sendAwait ${name} to ${destString || 'bg'}`, bm);
     const isBackgroundPage = Env.isBackgroundPage();
@@ -552,10 +495,17 @@ export class BrowserMsg {
       const handler: Bm.AsyncRespondingHandler = BrowserMsg.HANDLERS_REGISTERED_BACKGROUND[name];
       return await handler(bm);
     }
-    return await BrowserMsg.sendRaw(destString, name, bm, awaitRes);
-  }
+    return await BrowserMsg.sendRaw(destString, name, bm, awaitRes, sendCallback, postToSelf);
+  };
 
-  private static sendRaw(destString: string | undefined, name: string, bm: Dict<unknown>, awaitRes = false): Promise<Bm.Response> {
+  private static sendRaw = async (
+    destString: string | undefined,
+    name: string,
+    bm: Dict<unknown>,
+    awaitRes = false,
+    sendCallback = Value.noop,
+    postToSelf = true
+  ): Promise<Bm.Response> => {
     const msg: Bm.Raw = {
       name,
       data: { bm },
@@ -563,19 +513,7 @@ export class BrowserMsg {
       uid: SymmetricMessageEncryption.generateIV(),
       stack: Catch.stackTrace(),
     };
-    // eslint-disable-next-line no-null/no-null
-    if (!Env.isBackgroundPage() && msg.to !== null) {
-      const validMsg: Bm.RawWithWindowExtensions = { ...msg, to: msg.to };
-      // send via window messaging in parallel
-      Catch.try(async () => {
-        // todo: can objUrls be deleted by another recipient?
-        const encryptedMsg = await SymmetricMessageEncryption.encrypt(validMsg);
-        BrowserMsg.sendToChildren(encryptedMsg);
-        postMessage(encryptedMsg, '*');
-        BrowserMsg.sendUpParentLine(encryptedMsg);
-      })();
-    }
-    return new Promise((resolve, reject) => {
+    const runtimeMessagePromise = new Promise((resolve, reject) => {
       const processRawMsgResponse = (r: Bm.RawResponse) => {
         if (!awaitRes) {
           resolve(undefined);
@@ -635,7 +573,22 @@ export class BrowserMsg {
         }
       }
     });
-  }
+    // eslint-disable-next-line no-null/no-null
+    if (!Env.isBackgroundPage() && msg.to !== null) {
+      // send via window messaging in parallel
+      const validMsg: Bm.RawWithWindowExtensions = { ...msg, to: msg.to };
+      // todo: can objUrls be deleted by another recipient?
+      const encryptedMsg = await SymmetricMessageEncryption.encrypt(validMsg);
+      BrowserMsg.sendToChildren(encryptedMsg);
+      if (postToSelf) {
+        window.postMessage(encryptedMsg, '*');
+      }
+      BrowserMsg.sendUpParentLine(encryptedMsg);
+    }
+    sendCallback();
+    // only runtimeMessagePromise can potentially yield a result
+    return runtimeMessagePromise;
+  };
 
   private static sendUpParentLine(encryptedMsg: SymEncryptedMessage) {
     const encryptedWithPropagationFlag: SymEncryptedMessage = { ...encryptedMsg, propagateToParent: true };

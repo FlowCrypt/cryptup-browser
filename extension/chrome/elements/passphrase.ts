@@ -196,8 +196,7 @@ View.run(
     };
 
     private closeDialog = (entered = false, initiatorFrameId?: string) => {
-      BrowserMsg.send.closeDialog(this);
-      BrowserMsg.send.passphraseEntry({ entered, initiatorFrameId });
+      BrowserMsg.send.passphraseEntry({ entered, initiatorFrameId }, () => BrowserMsg.send.closeDialog(this));
     };
 
     private submitHandler = async () => {

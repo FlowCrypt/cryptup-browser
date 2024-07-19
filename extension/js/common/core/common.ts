@@ -168,7 +168,7 @@ export class Str {
 
   public static is7bit = (content: string | Uint8Array): boolean => {
     for (let i = 0; i < content.length; i++) {
-      const code = typeof content === 'string' ? content.charCodeAt(i) : content[i] ?? 0;
+      const code = typeof content === 'string' ? content.charCodeAt(i) : (content[i] ?? 0);
       if (!(code >= 0 && code <= 127)) {
         return false;
       }

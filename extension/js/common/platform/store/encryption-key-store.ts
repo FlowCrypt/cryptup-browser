@@ -7,14 +7,16 @@ import { secureRandomBytes } from '../util.js';
 export class EncryptionKeyStore {
   private static key = 'cryptup_cryptokey' as const;
 
-  public static async get(length?: number): Promise<ArrayBuffer> {
+  public static get = async (length?: number): Promise<Buf> => {
     const storageObj = await storageGet('local', [EncryptionKeyStore.key]);
     const value = storageObj[EncryptionKeyStore.key];
-    if (!length || typeof value !== 'undefined') {
-      return Buf.fromBase64Str(value as string);
+    if (typeof value === 'string') {
+      return Buf.fromBase64Str(value);
+    } else if (!length) {
+      throw new Error('Failed to read the crypto key from local storage!');
     }
-    const newKey = secureRandomBytes(length);
-    await storageSet('local', { [EncryptionKeyStore.key]: new Buf(newKey).toBase64Str() });
+    const newKey = new Buf(secureRandomBytes(length));
+    await storageSet('local', { [EncryptionKeyStore.key]: newKey.toBase64Str() });
     return newKey;
-  }
+  };
 }

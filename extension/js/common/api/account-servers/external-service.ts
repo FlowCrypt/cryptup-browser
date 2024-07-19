@@ -28,6 +28,7 @@ export namespace FesRes {
   };
   export type ServiceInfo = { vendor: string; service: string; orgId: string; version: string; apiVersion: string };
   export type ClientConfiguration = { clientConfiguration: ClientConfigurationJson };
+  export type DomainConfiguration = { authentication: AuthenticationConfiguration; clientConfiguration: ClientConfigurationJson };
 }
 
 /**
