@@ -29,6 +29,12 @@ export type AttachmentProperties = {
   contentDescription?: string;
   contentTransferEncoding?: ContentTransferEncoding;
 };
+export type ThunderbirdAttachment = {
+  name: string;
+  contentType: string;
+  data: Buf;
+  treatAs: Attachment$treatAs;
+};
 export type AttachmentMeta = (AttachmentId | { data: Uint8Array }) & AttachmentProperties;
 
 export type FcAttachmentLinkData = { name: string; type: string; size: number };
