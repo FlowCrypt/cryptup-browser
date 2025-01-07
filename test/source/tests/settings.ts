@@ -382,6 +382,7 @@ export const defineSettingsTests = (testVariant: TestVariant, testWithBrowser: T
         const firstFrameId = /frameId=.*?&/s.exec(framesUrls[0])![0];
         const errorFrame = await contactsFrame.getFrame(['pgp_pubkey.htm', firstFrameId]);
         await errorFrame.waitForContent('@error-introduce-label', 'This OpenPGP key is not usable.');
+        await errorFrame.waitForContent('@error-introduce-label', 'Could not verify primary key: dsa keys are considered too weak');
         await errorFrame.waitForInputValue('@error-email-input', 'dsa@flowcrypt.test');
       })
     );

@@ -428,6 +428,19 @@ export class OpenPGPKey {
     return nonDummyPrvPackets.every(p => p.isDecrypted());
   }
 
+  public static async checkPublicKeyError(pubkey: Key): Promise<string | undefined> {
+    try {
+      const key = await OpenPGPKey.extractExternalLibraryObjFromKey(pubkey);
+      await opgp.encrypt({
+        message: await opgp.createMessage({ text: OpenPGPKey.encryptionText }),
+        encryptionKeys: key.toPublic(),
+        format: 'armored',
+      });
+      return undefined;
+    } catch (err) {
+      return String(err);
+    }
+  }
   public static isFullyEncrypted(key: OpenPGP.PrivateKey): boolean {
     const nonDummyPrvPackets = OpenPGPKey.getPrvPackets(key);
     return nonDummyPrvPackets.every(p => !p.isDecrypted());

@@ -1446,6 +1446,10 @@ td {
   align-items: flex-start;
 }
 
+.pgp_neutral .error_container .error_info .error_introduce_label {
+  white-space: pre-line;
+}
+
 .pgp_neutral .error_container .error_info span {
   color: #a44;
   font-size: 14px;
@@ -1630,6 +1634,10 @@ td {
 
 #pgp_block.pgp_pubkey pre.pubkey {
   display: none;
+}
+
+#pgp_block.pgp_pubkey .action_show_full {
+  width: 118px;
 }
 
 #pgp_block .three_dots {
