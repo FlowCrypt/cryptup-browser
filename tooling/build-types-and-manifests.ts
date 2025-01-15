@@ -52,8 +52,16 @@ addManifest(
     manifest.manifest_version = 2;
     manifest.name = 'FlowCrypt Encryption for Thunderbird';
     manifest.description = 'Simple end-to-end encryption to secure email and attachments on Thunderbird';
-    manifest.permissions = [...(manifest.permissions ?? []), 'compose', 'messagesRead', 'messagesUpdate', 'messagesModify', 'accountsRead'];
-
+    manifest.permissions = [
+      ...(manifest.permissions ?? []),
+      'compose',
+      'downloads',
+      'downloads.open',
+      'messagesRead',
+      'messagesUpdate',
+      'messagesModify',
+      'accountsRead',
+    ];
     const manifestV3 = manifest as chrome.runtime.ManifestV3;
     manifest.web_accessible_resources = manifestV3.web_accessible_resources?.[0].resources;
     manifest.content_security_policy = manifestV3.content_security_policy?.extension_pages;

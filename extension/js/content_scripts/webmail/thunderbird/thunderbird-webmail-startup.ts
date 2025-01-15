@@ -19,7 +19,8 @@ export class ThunderbirdWebmailStartup {
 
   private start = async () => {
     this.replacer = new ThunderbirdElementReplacer();
-    this.replacer.runIntervalFunctionsPeriodically();
+    // doesn't need hearbeat-like content replacer as the extension noticeably slows the Thunderbird client.
+    await this.replacer.handleThunderbirdMessageParsing();
     // todo: show notification using Thunderbird Notification as contentscript notification or such does not work.
     // await notifications.showInitial(acctEmail);
     // notifications.show(

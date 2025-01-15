@@ -3516,6 +3516,64 @@ body#settings div.webmail_notifications div.webmail_notification a:hover {
   text-decoration: none;
 }
 
+/* thunderbird ui css */
+
+.thunderbird_attachment_root {
+  margin: 0 7px 7px 0;
+  padding: 6px 4px;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  color: #444;
+  text-overflow: ellipsis;
+  align-items: center;
+  align-content: center;
+  width: 240px;
+  max-width: 270px;
+  display: inline-flex;
+  cursor: pointer;
+  position: relative;
+  border-radius: 2px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.thunderbird_attachment_root div {
+  display: inline-block;
+}
+
+.thunderbird_attachment_root .thunderbird_attachment_name {
+  margin: 0 2px;
+}
+
+.thunderbird_attachment_root .thunderbird_attachment_icon {
+  height: 40px;
+  width: 40px;
+  background: #fff;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.thunderbird_attachment_root .thunderbird_attachment_download {
+  display: none;
+  padding: 6px;
+  height: 30px;
+  width: 30px;
+  right: 0;
+  position: absolute;
+  background: #333;
+  opacity: 0.88;
+  border-radius: 2px;
+  margin: 3px 6px;
+}
+
+.thunderbird_attachment_root:hover .thunderbird_attachment_download {
+  display: inline-block;
+}
+
+.thunderbird_attachment_download img {
+  width: 100%;
+}
+
 /* print class */
 @media screen {
   .printable {

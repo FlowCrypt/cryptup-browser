@@ -13,6 +13,7 @@ import { GoogleOAuth } from '../common/api/authentication/google/google-oauth.js
 import { AcctStore } from '../common/platform/store/acct-store.js';
 import { ConfiguredIdpOAuth } from '../common/api/authentication/configured-idp-oauth.js';
 import { Url, Str } from '../common/core/common.js';
+import { Attachment, ThunderbirdAttachment } from '../common/core/attachment.js';
 
 export class BgHandlers {
   public static openSettingsPageHandler: Bm.AsyncResponselessHandler = async ({ page, path, pageUrlParams, addNewAcct, acctEmail }: Bm.Settings) => {
@@ -160,23 +161,63 @@ export class BgHandlers {
     });
   };
 
+  public static thunderbirdGetDownloadableAttachment = async (): Promise<Bm.Res.ThunderbirdGetDownloadableAttachment> => {
+    const processableAttachments: ThunderbirdAttachment[] = [];
+    const [tab] = await messenger.mailTabs.query({ active: true, currentWindow: true });
+    const message = await messenger.messageDisplay.getDisplayedMessage(tab.id);
+    let from = '';
+    if (tab.id && message?.id) {
+      from = Str.parseEmail(message.author).email || '';
+      const mimeMsg = await messenger.messages.getFull(message.id);
+      let attachments = await messenger.messages.listAttachments(message.id);
+      const fcAttachments: Attachment[] = [];
+      if (mimeMsg.parts?.[0].contentType === 'multipart/signed' && mimeMsg.parts?.[0].parts?.length === 2) {
+        attachments = attachments.filter(file => file.contentType === 'application/pgp-signature');
+      }
+      // convert Thunderbird Attachments to FlowCrypt recognizable Attachments
+      for (const attachment of attachments) {
+        const file = await messenger.messages.getAttachmentFile(message.id, attachment.partName);
+        fcAttachments.push(
+          new Attachment({
+            data: new Uint8Array(await file.arrayBuffer()),
+            type: attachment.contentType,
+            name: attachment.name,
+            length: attachment.size,
+          })
+        );
+      }
+      for (const fcAttachment of fcAttachments) {
+        processableAttachments.push({
+          name: fcAttachment.name,
+          contentType: fcAttachment.type,
+          data: fcAttachment.getData(),
+          treatAs: fcAttachment.treatAs(fcAttachments),
+        });
+      }
+    }
+    return { from, processableAttachments };
+  };
+
+  public static thunderbirdInitiateAttachmentDownload = async (
+    r: Bm.ThunderbirdInitiateAttachmentDownload
+  ): Promise<Bm.Res.ThunderbirdInitiateAttachmentDownload> => {
+    // todo - add prompt  using messenger.notifications.create. requires `notifications` permission;
+    const blob = new Blob([r.decryptedContent]);
+    const fileUrl = URL.createObjectURL(blob);
+    await browser.downloads.download({
+      url: fileUrl,
+      filename: r.decryptedFileName,
+      saveAs: true,
+    });
+    URL.revokeObjectURL(fileUrl);
+  };
+
   public static thunderbirdGetCurrentUserHandler = async (): Promise<Bm.Res.ThunderbirdGetCurrentUser> => {
     const [tab] = await messenger.tabs.query({ active: true, currentWindow: true });
     if (tab.id) {
       const messageDetails = await messenger.messageDisplay.getDisplayedMessage(tab.id);
       const accountId = messageDetails?.folder?.accountId || '';
       return (await messenger.accounts.get(accountId))?.name;
-    }
-    return;
-  };
-
-  public static thunderbirdMsgGetHandler = async (): Promise<Bm.Res.ThunderbirdMsgGet> => {
-    const [tab] = await messenger.tabs.query({ active: true, currentWindow: true });
-    if (tab.id) {
-      const message = await messenger.messageDisplay.getDisplayedMessage(tab.id);
-      if (message?.id) {
-        return await messenger.messages.getFull(Number(message.id));
-      }
     }
     return;
   };

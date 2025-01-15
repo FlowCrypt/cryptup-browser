@@ -113,7 +113,7 @@ for (const buildType of ['chrome-consumer', 'chrome-enterprise', 'thunderbird-co
       console.error(`${buildType} - The content_security_policy should be a string`);
       errsFound++;
     }
-    const thunderbirdExpectedPermissions = ['compose', 'messagesRead', 'messagesUpdate', 'messagesModify', 'accountsRead'];
+    const thunderbirdExpectedPermissions = ['compose', 'downloads', 'downloads.open', 'messagesRead', 'messagesUpdate', 'messagesModify', 'accountsRead'];
     const buildHostPermissions = isManifestV3Build ? manifest.host_permissions : manifest.permissions;
     for (const expectedHostPermission of thunderbirdExpectedPermissions) {
       if (!buildHostPermissions?.includes(expectedHostPermission)) {
