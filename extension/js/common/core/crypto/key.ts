@@ -526,6 +526,7 @@ export class KeyUtil {
     if (decodedChunks.length === 0) return false;
 
     const rawData = decodedChunks.join('');
+    // eslint-disable-next-line @typescript-eslint/no-misused-spread
     const dataBytes = new Uint8Array([...rawData].map(c => c.charCodeAt(0)));
 
     return KeyUtil.crc24(dataBytes) === providedCRC;

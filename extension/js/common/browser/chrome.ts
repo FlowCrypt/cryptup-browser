@@ -69,7 +69,7 @@ export const storageGetAll = async (storageType: ChromeStorageType): Promise<{ [
       void handleFatalErr('storage_undefined', new Error('storage is undefined'));
     } else {
       const storage = chrome.storage[storageType];
-      storage.get(resolve);
+      void storage.get(resolve);
     }
   });
 };
