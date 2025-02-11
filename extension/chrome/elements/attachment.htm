@@ -9,18 +9,19 @@
     <link rel="stylesheet" href="/css/sweetalert2.css" />
   </head>
 
-  <body class="attachment" title="PREVIEW" data-test="attachment-container">
-    <button id="download" data-test="download-attachment" title="DOWNLOAD">
-      <img src="/img/svgs/download-link.svg" alt="download attachment" width="16" />
-    </button>
-    <span class="file-format-holder">
-      <img id="file-format" src="/img/fileformat/generic.png" alt="png file" />
-    </span>
-    <div id="header" data-test="container-attachment-header">
-      <span></span>
+  <body title="PREVIEW">
+    <div id="attachment-container" data-test="attachment-container">
+      <button id="download" data-test="download-attachment" title="DOWNLOAD">
+        <img src="/img/svgs/download-link.svg" alt="download attachment" width="16" />
+      </button>
+      <span class="file-format-holder">
+        <img id="file-format" src="/img/fileformat/generic.png" alt="png file" />
+      </span>
+      <div id="header" data-test="container-attachment-header">
+        <span></span>
+      </div>
+      <div id="name" data-test="attachment-name"></div>
     </div>
-    <div id="name" data-test="attachment-name"></div>
-
     <script src="/lib/trusted-types.js"></script>
     <script src="/lib/purify.js"></script>
     <script src="/lib/jquery.min.js"></script>

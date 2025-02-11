@@ -3026,7 +3026,7 @@ table#compose #error_container_reply_message #error_text_reply_message {
   top: -2px;
 }
 
-body.attachment {
+#attachment-container {
   border: 1px solid #dadada;
   border-radius: 2px;
   text-align: center;
@@ -3038,11 +3038,11 @@ body.attachment {
   cursor: pointer;
 }
 
-body.attachment:hover {
+#attachment-container:hover {
   border-color: #eaeaea;
 }
 
-body.attachment.error-occured {
+#attachment-container.error-occured {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3053,7 +3053,7 @@ body.attachment.error-occured {
   cursor: default;
 }
 
-body.attachment #download {
+#attachment-container #download {
   display: flex;
   opacity: 0;
   position: absolute;
@@ -3070,17 +3070,17 @@ body.attachment #download {
   border: 0;
 }
 
-body.attachment:focus-within #download,
-body.attachment:hover #download {
+#attachment-container:focus-within #download,
+#attachment-container:hover #download {
   opacity: 1;
 }
 
-body.attachment #download:focus {
+#attachment-container #download:focus {
   box-shadow: 0 0 5px #31a217;
   outline: none;
 }
 
-body.attachment .download_progress {
+#attachment-container .download_progress {
   position: absolute;
   top: 50%;
   margin-top: -6px;
@@ -3088,7 +3088,7 @@ body.attachment .download_progress {
   line-height: 1;
 }
 
-body.attachment #header {
+#attachment-container #header {
   height: 90px;
   font-weight: 400;
   font-size: 14px;
@@ -3103,12 +3103,12 @@ body.attachment #header {
   justify-content: center;
 }
 
-body.attachment #type {
+#attachment-container #type {
   padding: 10px 0;
   color: #999;
 }
 
-body.attachment #name {
+#attachment-container #name {
   padding: 7px 12px;
   background: #f3f3f3;
   position: absolute;
@@ -3122,7 +3122,7 @@ body.attachment #name {
   height: 12px;
 }
 
-body.attachment .file-format-holder {
+#attachment-container .file-format-holder {
   display: inline-block;
   border-radius: 120px;
   position: absolute;
@@ -3131,7 +3131,7 @@ body.attachment .file-format-holder {
   margin-bottom: 5px;
 }
 
-body.attachment .file-format-holder img#file-format {
+#attachment-container .file-format-holder img#file-format {
   width: 45px;
   height: auto;
   margin-top: 12px;
