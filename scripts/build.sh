@@ -50,7 +50,7 @@ copy_dependencies() {
   cp node_modules/squire-rte/dist/squire.js $OUTPUT_DIRECTORY/lib/squire.js
   cp node_modules/clipboard/dist/clipboard.js $OUTPUT_DIRECTORY/lib/clipboard.js
   cp node_modules/@flowcrypt/fine-uploader/fine-uploader/fine-uploader.js $OUTPUT_DIRECTORY/lib/fine-uploader.js
-  cp node_modules/filesize/dist/filesize.js $OUTPUT_DIRECTORY/lib/filesize.js
+  cp node_modules/filesize/dist/filesize.esm.js $OUTPUT_DIRECTORY/lib/filesize.js
   # Had to use legacy build as puppeteer returns 'Promise.withResolvers is not a function' error
   # https://github.com/mozilla/pdf.js/issues/18006#issuecomment-2078739672
   cp node_modules/pdfjs-dist/legacy/build/pdf.min.mjs $OUTPUT_DIRECTORY/lib/pdf.min.mjs
