@@ -78,6 +78,7 @@
       "resources": [
         "/css/webmail.css",
         "/img/svgs/reply-icon.svg",
+        "/img/svgs/reply-all-icon.svg",
         "/img/svgs/forward-icon.svg",
         "/img/svgs/spinner-white-small.svg",
         "/img/svgs/spinner-green-small.svg",

@@ -2675,6 +2675,10 @@ div#contacts .select_contact .select_contact_email {
   text-overflow: ellipsis;
 }
 
+div#contacts .select_contact:hover {
+  background: #eee;
+}
+
 div#contacts ul li img,
 div#contacts div.allow-google-contact-search img {
   padding-left: 6px;

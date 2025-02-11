@@ -79,6 +79,7 @@ export class GmailElementReplacer extends WebmailElementReplacer {
     super();
     this.webmailCommon = new WebmailCommon(acctEmail, injector);
     this.pubLookup = new PubLookup(clientConfiguration);
+    this.setupSecureActionsOnGmailMenu();
   }
 
   public getIntervalFunctions = (): IntervalFunction[] => {
@@ -148,14 +149,14 @@ export class GmailElementReplacer extends WebmailElementReplacer {
     }
   };
 
-  public addSecureActionsToMessageMenu = () => {
-    $(document).on('click', 'div.aHU.hx', event => {
-      const $actionsBtn = $(event.currentTarget).find(this.sel.msgActionsBtn);
-      if ($actionsBtn.length && !$('.action_menu_message_button').length) {
-        this.addMenuButton('reply', '#r');
-        this.addMenuButton('forward', '#r3');
+  public setupSecureActionsOnGmailMenu = () => {
+    const observer = new MutationObserver(() => {
+      const gmailActionsMenu = document.querySelector(this.sel.msgActionsMenu);
+      if (gmailActionsMenu && (gmailActionsMenu as HTMLElement).offsetParent !== undefined) {
+        this.addSecureActionsToMessageMenu();
       }
     });
+    observer.observe(document.body, { childList: true, subtree: true });
   };
 
   private everything = () => {
@@ -291,13 +292,14 @@ export class GmailElementReplacer extends WebmailElementReplacer {
     return !!$('iframe.pgp_block').filter(':visible').length;
   };
 
-  private addMenuButton = (action: 'reply' | 'forward', selector: string) => {
-    const gmailActionsMenuContainer = $(this.sel.msgActionsMenu).find(selector);
-    const button = $(this.factory.actionsMenuBtn(action)).insertAfter(gmailActionsMenuContainer); // xss-safe-factory
-    button.on(
-      'click',
-      Ui.event.handle((el, ev: JQuery.Event) => this.actionActivateSecureReplyHandler(el, ev))
-    );
+  private addMenuButton = (replyOption: ReplyOption, gmailContextMenuBtn: string) => {
+    if ($(gmailContextMenuBtn).is(':visible')) {
+      const button = $(this.factory.btnSecureMenuBtn(replyOption)).insertAfter(gmailContextMenuBtn); // xss-safe-factory
+      button.on(
+        'click',
+        Ui.event.handle((el, ev: JQuery.Event) => this.actionActivateSecureReplyHandler(el, ev))
+      );
+    }
   };
 
   private replaceConvoBtns = (force = false) => {
@@ -371,7 +373,14 @@ export class GmailElementReplacer extends WebmailElementReplacer {
   private actionActivateSecureReplyHandler = async (btn: HTMLElement, event: JQuery.Event) => {
     event.stopImmediatePropagation();
     const secureReplyInvokedFromMenu = btn.className.includes('action_menu_message_button');
-    const replyOption: ReplyOption = btn.className.includes('reply') ? 'a_reply' : 'a_forward';
+    let replyOption: ReplyOption;
+    if (btn.className.includes('reply-all')) {
+      replyOption = 'a_reply_all';
+    } else if (btn.className.includes('forward')) {
+      replyOption = 'a_forward';
+    } else {
+      replyOption = 'a_reply';
+    }
     if ($('#switch_to_encrypted_reply').length) {
       $('#switch_to_encrypted_reply').trigger('click');
       return;
@@ -921,5 +930,14 @@ export class GmailElementReplacer extends WebmailElementReplacer {
         offlineDraftsContainer.remove();
       }
     }
+  };
+
+  private addSecureActionsToMessageMenu = () => {
+    if ($('.action_menu_message_button').length) {
+      return;
+    }
+    this.addMenuButton('a_reply', '#r');
+    this.addMenuButton('a_reply_all', '#r2');
+    this.addMenuButton('a_forward', '#r3');
   };
 }

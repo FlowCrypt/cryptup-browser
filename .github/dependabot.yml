@@ -26,15 +26,11 @@ updates:
       # https://github.com/FlowCrypt/flowcrypt-browser/pull/3961#issuecomment-921335748
       - dependency-name: "iso-8859-2"
         versions: [ ">=1.0.1" ]
-      - dependency-name: "@openpgp/web-stream-tools"
-        versions: [">= 0.0.14"]
       - dependency-name: "ava"
         update-types: ["version-update:semver-major"]
       - dependency-name: "chai"
         update-types: ["version-update:semver-major"]
       - dependency-name: "chai-as-promised"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "openpgp"
         update-types: ["version-update:semver-major"]
       - dependency-name: "filesize"
         versions: [ ">= 10.1.3" ]

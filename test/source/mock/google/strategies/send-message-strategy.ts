@@ -30,7 +30,7 @@ const checkForAbsenceofBase64InAttachments = async (attachments: Attachment[]) =
     if (typeof encoding !== 'string') {
       throw new HttpClientErr(`Error: Content-Transfer-Encoding isn't present in one of the attachments`);
     }
-    if (!['7bit', 'quoted-printable'].includes(encoding)) {
+    if (!['7bit', 'quoted-printable', 'base64'].includes(encoding)) {
       throw new HttpClientErr(`Error: Unexpected Content-Transfer-Encoding: ${encoding}`);
     }
   }

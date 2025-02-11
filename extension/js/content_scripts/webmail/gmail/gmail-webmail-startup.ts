@@ -45,7 +45,6 @@ export class GmailWebmailStartup {
     const messageRenderer = await MessageRenderer.newInstance(acctEmail, new Gmail(acctEmail), relayManager, factory);
     this.replacer = new GmailElementReplacer(factory, clientConfiguration, acctEmail, messageRenderer, injector, notifications, relayManager);
     await notifications.showInitial(acctEmail);
-    this.replacer.addSecureActionsToMessageMenu();
     this.replacer.runIntervalFunctionsPeriodically();
   };
 

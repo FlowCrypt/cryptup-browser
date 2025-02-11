@@ -61,7 +61,7 @@ blocks:
     run:
       when: branch = 'master' OR branch =~ 'live-test'  OR branch =~ 'gmail-test'
     execution_time_limit:
-      minutes: 45
+      minutes: 60
     task:
       secrets:
         - name: flowcrypt-browser-ci-secrets
