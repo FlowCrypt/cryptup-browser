@@ -19,11 +19,13 @@ $ cd some/folder/flowcrypt-browser
 $ npm install
 ```
 
-2. To build the project (currently available for Linux and Mac only), run the following command:
+2. To build the project, run the following command:
 
 ```bash
 $ npm run build
 ```
+
+- For building project on Windows we recommend to use [Cygwin](https://www.cygwin.com/) with rsync package.
 
 After executing the build command, you can find your built project in the `build/chrome-consumer` and `build/firefox-consumer` folders.
 

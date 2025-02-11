@@ -59,9 +59,9 @@
     "zxcvbn": "4.4.2"
   },
   "scripts": {
-    "build": "./scripts/build.sh",
-    "build-incremental": "./scripts/build.sh --incremental",
-    "build-assets-only": "./scripts/build.sh --assets-only",
+    "build": "bash scripts/build.sh",
+    "build-incremental": "bash scripts/build.sh --incremental",
+    "build-assets-only": "bash scripts/build.sh --assets-only",
     "pretest": "npm run build --silent && cd conf && node ../build/tooling/tsc-compiler --project tsconfig.test.json && node ../build/tooling/resolve-modules --project tsconfig.test.json",
     "pretest-incremental": "npm run build-incremental --silent && cd conf && node ../build/tooling/tsc-compiler --project tsconfig.test.json && node ../build/tooling/resolve-modules --project tsconfig.test.json",
     "postinstall": "npm run pretest",
@@ -84,7 +84,7 @@
     "test_ci_chrome_enterprise": "npx ava --timeout=30m --verbose --tap --concurrency=10 build/test/test/source/test.js -- ENTERPRISE-MOCK STANDARD-GROUP | npx tap-xunit > report.xml",
     "test_ci_chrome_consumer_flaky": "npx ava --timeout=30m --verbose --tap --concurrency=10 build/test/test/source/test.js -- CONSUMER-MOCK FLAKY-GROUP | npx tap-xunit > report.xml",
     "test_ci_chrome_content_scripts": "npx ava --timeout=3m --verbose --tap build/test/test/source/test.js -- CONTENT-SCRIPT-TESTS > report.xml",
-    "dev_start_gmail_mock_api": "./scripts/build.sh && cd ./conf && node ../build/tooling/tsc-compiler --project tsconfig.test.json && cd .. && node ./build/test/test/source/mock.js",
+    "dev_start_gmail_mock_api": "bash scripts/build.sh && cd ./conf && node ../build/tooling/tsc-compiler --project tsconfig.test.json && cd .. && node ./build/test/test/source/mock.js",
     "run_firefox": "npm run build-incremental && npx web-ext run --source-dir ./build/firefox-consumer/ --firefox-profile ~/.mozilla/firefox/flowcrypt-dev --keep-profile-changes",
     "run_firefox_windows": "npm run build-incremental && npx web-ext run --source-dir ./build/firefox-consumer/ --firefox-profile %userprofile%/AppData/Local/Mozilla/Firefox/Profiles/flowcrypt-dev --keep-profile-changes",
     "find_unused": "ts-prune -p tsconfig.json | grep -v extension/types | grep -v extension/js/common/core",
