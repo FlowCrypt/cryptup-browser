@@ -46,7 +46,7 @@
     "bootstrap": "4.6.2",
     "clipboard": "2.0.11",
     "dompurify": "3.2.4",
-    "filesize": "10.1.2",
+    "filesize": "10.1.6",
     "iso-8859-2": "1.0.0",
     "jquery": "3.7.1",
     "linkify-html": "^4.1.4",
