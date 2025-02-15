@@ -374,7 +374,7 @@ export class GmailElementReplacer extends WebmailElementReplacer {
     event.stopImmediatePropagation();
     const secureReplyInvokedFromMenu = btn.className.includes('action_menu_message_button');
     let replyOption: ReplyOption;
-    if (btn.className.includes('reply-all')) {
+    if (btn.className.includes('reply_all')) {
       replyOption = 'a_reply_all';
     } else if (btn.className.includes('forward')) {
       replyOption = 'a_forward';

@@ -270,14 +270,15 @@ export class XssSafeFactory {
   };
 
   public btnSecureMenuBtn = (replyOption: ReplyOption) => {
-    const actionText = replyOption.replace('a_', '').replace('_', ' ');
-    const action = {
-      underscore: actionText.replace(' ', '_'),
-      hyphen: actionText.replace(' ', '-'),
+    const replyOptionText = replyOption.replace('a_', '').replace('_', ' ');
+    const htmlAttrib = {
+      className: replyOptionText.replace(' ', '_'),
+      testName: replyOptionText.replace(' ', '-'),
     };
+    const displayText = replyOptionText === 'reply all' ? replyOptionText.replace('all', 'to all') : replyOptionText;
     // * The action_${action.underscore}_message_button is used as an identifier in GmailElementReplacer.actionActivateSecureReplyHandler()
-    return `<div class="action_${action.underscore}_message_button action_menu_message_button" data-test="action-${action.hyphen}-message-button">
-    <img src="${this.srcImg(`svgs/${action.hyphen}-icon.svg`)}" /><span>secure ${actionText}</span>
+    return `<div class="action_${htmlAttrib.className}_message_button action_menu_message_button" data-test="action-${htmlAttrib.testName}-message-button">
+    <img src="${this.srcImg(`svgs/${htmlAttrib.testName}-icon.svg`)}" /><span>secure ${displayText}</span>
     </div>`;
   };
 

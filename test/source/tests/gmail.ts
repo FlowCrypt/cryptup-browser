@@ -525,6 +525,8 @@ export const defineGmailTests = (testVariant: TestVariant, testWithBrowser: Test
         await gmailPage.waitAndClick('@action-reply-all-message-button');
         const replyBox2 = await gmailPage.getFrame(['/chrome/elements/compose.htm'], { sleep: 5 });
         await replyBox2.waitForContent('@input-body', '');
+        const recipientsCount = await replyBox2.target.$$eval('.email_address', elements => elements.length);
+        expect(recipientsCount).to.equal(2);
         await gmailPage.waitAndClick(gmailContextMenu);
         await Util.sleep(1);
         expect(await gmailPage.isElementPresent('@action-forward-message-button'));
